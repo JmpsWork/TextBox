@@ -62,12 +62,50 @@ dict_keymap = {
     pygame.K_7: '7',
     pygame.K_8: '8',
     pygame.K_9: '9',
+    # Symbols
+    pygame.K_PERIOD: '.',
+    pygame.K_SLASH: '/',
+    pygame.K_MINUS: '-',
+    pygame.K_QUOTE: '\'',
+    pygame.K_COMMA: ',',
+    pygame.K_SEMICOLON: ';',
+    pygame.K_RIGHTBRACKET: '[',
+    pygame.K_LEFTBRACKET: ']',
+    pygame.K_EQUALS: '=',
+    pygame.K_BACKQUOTE: '`',
+    pygame.K_BACKSLASH: '\\',
     # Boolean keys (backspace, enter, etc.)
     pygame.K_BACKSPACE: 'BACKSPACE',
     pygame.K_RSHIFT: 'RSHIFT',
     pygame.K_LSHIFT: 'LSHIFT',
     pygame.K_CAPSLOCK: 'CAPSLOCK',
     pygame.K_KP_ENTER: 'ENTER'
+}
+
+dict_keymap_alt = {
+    # Number alts
+    pygame.K_0: ')',  # Any keys that have an alternate key when holding shift
+    pygame.K_1: '!',
+    pygame.K_2: '@',
+    pygame.K_3: '#',
+    pygame.K_4: '$',
+    pygame.K_5: '%',
+    pygame.K_6: '^',
+    pygame.K_7: '&',
+    pygame.K_8: '*',
+    pygame.K_9: '(',
+    # Symbols alts
+    pygame.K_PERIOD: '>',
+    pygame.K_SLASH: '?',
+    pygame.K_MINUS: '_',
+    pygame.K_QUOTE: '\"',
+    pygame.K_COMMA: '<',
+    pygame.K_SEMICOLON: ':',
+    pygame.K_RIGHTBRACKET: '}',
+    pygame.K_LEFTBRACKET: '{',
+    pygame.K_EQUALS: '+',
+    pygame.K_BACKQUOTE: '~',
+    pygame.K_BACKSLASH: '|',
 }
 
 
@@ -123,10 +161,13 @@ class TextBox:
         for key in keys:  # key being the key index for the dict_keymap
             letter = dict_keymap[key]
             if self.upper is True:
-                letter = letter.upper()
+                variant = dict_keymap_alt.get(key)
+                if variant is None:
+                    letter = letter.upper()
+                else:
+                    letter = variant
             pressed = self.current_pressed.get(key)
-            # Exceptions for certain keys (such as capslock)
-            if pressed is None:
+            if pressed is None:  # Keep track of how long certain keys have been pressed for
                 self.current_pressed[key] = [letter, 0]
 
             time = self.current_pressed[key][1]
